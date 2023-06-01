@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data class="CaptchaDialogBinding">
+
+    </data>
+
+    <FrameLayout
+        android:id="@+id/cl_root"
+        android:layout_width="match_parent"
+        android:layout_height="500dp">
+
+        <WebView
+            android:id="@+id/captchaWebView"
+            android:background="@color/transparent_color"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="500dp" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </FrameLayout>
+
+</layout>

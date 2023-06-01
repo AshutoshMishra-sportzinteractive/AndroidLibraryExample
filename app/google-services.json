@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1068140087800",
+    "project_id": "librarydemo-f2a6a",
+    "storage_bucket": "librarydemo-f2a6a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1068140087800:android:0f6351097f42407dffee0d",
+        "android_client_info": {
+          "package_name": "com.example.androidlibraryexample"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABps6mNjKU4eHmQ0SZU5MtcqQyzZK8mLU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
