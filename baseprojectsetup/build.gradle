@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
+    id 'maven-publish'
 }
 
 android {
@@ -82,4 +83,18 @@ dependencies {
 
 
 
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            mavenAar(MavenPublication) {
+                from components.release
+
+                groupId = 'com.github.AshutoshMishra-sportzinteractive'
+                artifactId = 'sportz-interactive-lib'
+                version = '1.0'
+            }
+        }
+    }
 }
