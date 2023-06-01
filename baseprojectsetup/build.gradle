@@ -92,8 +92,8 @@ afterEvaluate {
                 from components.release
 
                 groupId = 'com.github.AshutoshMishra-sportzinteractive'
-                artifactId = 'sportz-interactive-lib'
-                version = '1.1'
+                artifactId = 'sportz-interactive-library'
+                version = '1.2'
             }
         }
     }
