@@ -3,7 +3,6 @@ package com.sportzinteractive.baseprojectsetup.di
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.sportzinteractive.baseprojectsetup.BuildConfig
 import com.sportzinteractive.baseprojectsetup.constants.CustomValues
 import com.sportzinteractive.baseprojectsetup.utils.CurlLoggingInterceptor
 import com.sportzinteractive.baseprojectsetup.utils.CustomRequestInterceptor
