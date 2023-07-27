@@ -45,14 +45,15 @@ object NetworkModule {
     fun providesOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         curlLoggingInterceptor: CurlLoggingInterceptor,
-        customRequestInterceptor: CustomRequestInterceptor
+        customRequestInterceptor: CustomRequestInterceptor,
+        customValues: CustomValues
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(15, TimeUnit.SECONDS)
             .connectTimeout(15, TimeUnit.SECONDS)
             .addNetworkInterceptor(customRequestInterceptor)
             .apply {
-                if (BuildConfig.DEBUG) {
+                if (customValues.isDebugMode) {
                     addInterceptor(httpLoggingInterceptor)
                     addInterceptor(curlLoggingInterceptor)
                     addNetworkInterceptor(StethoInterceptor())

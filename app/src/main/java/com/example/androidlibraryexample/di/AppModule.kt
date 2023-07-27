@@ -1,5 +1,6 @@
 package com.example.androidlibraryexample.di
 
+import com.example.androidlibraryexample.BuildConfig
 import com.example.androidlibraryexample.business.AuthRepositoryImpl
 import com.example.androidlibraryexample.data.AuthRepository
 import com.example.androidlibraryexample.data.ConfigManger
@@ -28,7 +29,8 @@ object AppModule {
         "",
         "DemoApp",
         "",
-        "6LdGSk0jAAAAAJFbgHx-wVyd4M5L_7Y_NHSa1GZW")
+        "6LdGSk0jAAAAAJFbgHx-wVyd4M5L_7Y_NHSa1GZW",
+        BuildConfig.DEBUG)
     }
 
     @Provides

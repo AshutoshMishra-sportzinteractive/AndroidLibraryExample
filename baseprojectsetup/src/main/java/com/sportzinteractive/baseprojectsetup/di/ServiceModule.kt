@@ -16,7 +16,7 @@ object ServiceModule {
 
     @Provides
     @ViewModelScoped
-    fun provideAuthServiceApi(retrofit: Retrofit): BaseService =
+    fun provideBaseService(retrofit: Retrofit): BaseService =
         retrofit.create(BaseService::class.java)
 
 }

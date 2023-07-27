@@ -15,6 +15,6 @@ interface RepositoryModule {
 
     @Binds
     @ViewModelScoped
-    fun provideAuthRepository(baseRepositoryImpl: BaseRepositoryImpl):BaseRepository
+    fun provideBaseRepository(baseRepositoryImpl: BaseRepositoryImpl):BaseRepository
 
 }
