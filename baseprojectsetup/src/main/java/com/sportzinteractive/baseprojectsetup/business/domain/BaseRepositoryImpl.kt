@@ -61,4 +61,35 @@ class BaseRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun <V : Any> rawBaseApiCallGet(url: String): Flow<Resource<Response<V>>?> {
+        return flow {
+            val result = safeApiCall(dispatcher) {
+                authServices.rawBaseApiCallGet<V>(
+                    url
+                )
+            }
+            when (result) {
+                is ApiResult.GenericError -> emit(
+                    Resource.Error(
+                        NetworkThrowable(
+                            result.code,
+                            result.message ?: ""
+                        )
+                    )
+                )
+                is ApiResult.NetworkError -> emit(
+                    Resource.Error(
+                        NetworkThrowable(
+                            0,
+                            result.message ?: ""
+                        )
+                    )
+                )
+                is ApiResult.Success -> {
+                    emit(Resource.Success(result.data))
+                }
+            }
+        }
+    }
+
 }
