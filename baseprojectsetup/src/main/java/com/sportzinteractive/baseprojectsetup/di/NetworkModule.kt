@@ -35,8 +35,8 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesCurlInterceptor(): CurlLoggingInterceptor {
-        return CurlLoggingInterceptor("cURL")
+    fun providesCurlInterceptor(customValues: CustomValues): CurlLoggingInterceptor {
+        return CurlLoggingInterceptor("cURL",customValues)
     }
 
     @Singleton
