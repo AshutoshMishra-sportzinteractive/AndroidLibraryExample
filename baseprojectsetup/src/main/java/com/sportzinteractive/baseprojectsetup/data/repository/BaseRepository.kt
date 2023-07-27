@@ -7,7 +7,7 @@ import retrofit2.Response
 interface BaseRepository {
 
 
-    fun <V : Any> rawJsonBaseApiCall(requestBody:Any,url:String):Flow<Resource<Response<V>>?>
+    fun <V : Any> rawJsonBaseApiCallPost(requestBody:Any,url:String):Flow<Resource<Response<V>>?>
 
     fun <V : Any> rawBaseApiCallGet(url:String):Flow<Resource<Response<V>>?>
 

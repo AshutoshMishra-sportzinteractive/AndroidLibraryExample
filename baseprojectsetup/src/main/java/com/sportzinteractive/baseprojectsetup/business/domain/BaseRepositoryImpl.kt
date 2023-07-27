@@ -23,7 +23,7 @@ class BaseRepositoryImpl @Inject constructor(
 ) : BaseRepository {
 
 
-    override fun <V : Any> rawJsonBaseApiCall(
+    override fun <V : Any> rawJsonBaseApiCallPost(
         requestBody: Any,
         url: String
     ): Flow<Resource<Response<V>>?> {
