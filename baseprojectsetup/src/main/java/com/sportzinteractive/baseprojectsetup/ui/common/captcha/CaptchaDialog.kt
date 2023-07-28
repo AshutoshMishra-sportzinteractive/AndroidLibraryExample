@@ -18,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 interface CaptchaListener{
-    fun getCaptcha(captcha:String)
+    fun getCaptcha(captcha:String,typeOfRequest:Int)
 }
 @AndroidEntryPoint
 class CaptchaDialog : BaseVBDialogFragment<CaptchaDialogBinding>(CaptchaDialogBinding::inflate) {
@@ -28,8 +28,10 @@ class CaptchaDialog : BaseVBDialogFragment<CaptchaDialogBinding>(CaptchaDialogBi
 
     companion object {
         private lateinit var listener: CaptchaListener
-        fun show(captchaListener: CaptchaListener, fragmentManager: FragmentManager) {
+        private var typeOfRequest: Int = 0
+        fun show(captchaListener: CaptchaListener,typeOfRequest:Int, fragmentManager: FragmentManager) {
             this.listener = captchaListener
+            this.typeOfRequest = typeOfRequest
             CaptchaDialog()
                 .show(
                     fragmentManager,
@@ -97,7 +99,7 @@ class CaptchaDialog : BaseVBDialogFragment<CaptchaDialogBinding>(CaptchaDialogBi
     fun reCaptchaCallbackInAndroid(g_response: String) {
         println("captcha::->>$g_response")
         dismiss()
-        listener.getCaptcha(g_response)
+        listener.getCaptcha(g_response, typeOfRequest)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
