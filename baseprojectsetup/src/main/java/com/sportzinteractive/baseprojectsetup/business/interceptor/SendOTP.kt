@@ -19,6 +19,6 @@ class SendOTP @Inject constructor(
         sendEmailMobileOTPRequest: SendEmailMobileOTPRequest,
         url:String
     ): Flow<Resource<OTPResponse?>> {
-        return authRepository.verifyOTP(sendEmailMobileOTPRequest,url)
+        return authRepository.sendOTP(sendEmailMobileOTPRequest,url)
     }
 }
