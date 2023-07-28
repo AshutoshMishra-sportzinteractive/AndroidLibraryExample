@@ -3,6 +3,8 @@ package com.example.androidlibraryexample
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.androidlibraryexample.business.AuthRepositoryImpl
 import com.example.androidlibraryexample.data.ConfigManger
@@ -35,6 +37,8 @@ class MainActivity : AppCompatActivity(), CaptchaListener {
     @Inject
     lateinit var authRepositoryImpl: AuthRepositoryImpl
 
+    private val loginViewModel: MainViewModel by viewModels()
+
     @Inject
     lateinit var configManger: ConfigManger
 
@@ -53,7 +57,7 @@ class MainActivity : AppCompatActivity(), CaptchaListener {
         //CaptchaDialog.show(this,supportFragmentManager)
         //getData()
         //chromeTabIntent.openCustomTab(this, "https://www.wplt20.com")
-
+        loginViewModel.getCountries()
         showPopUp()
     }
 

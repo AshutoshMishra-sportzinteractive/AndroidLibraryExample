@@ -1,10 +1,9 @@
 package com.sportzinteractive.baseprojectsetup.data.model.otp
 
 import com.google.gson.annotations.SerializedName
-import com.sportzinteractive.baseprojectsetup.constants.CustomValues
 import com.sportzinteractive.baseprojectsetup.utils.DeviceName
 
-data class SendEmailOTPRequest(
+data class SendEmailMobileOTPRequest(
     @SerializedName("email_id")
     val emailId: String?,
     @SerializedName("mobile_no")
