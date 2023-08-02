@@ -10,7 +10,6 @@ import com.sportzinteractive.baseprojectsetup.data.repository.AuthRepository
 import com.sportzinteractive.baseprojectsetup.data.services.AuthService
 import com.sportzinteractive.baseprojectsetup.di.IoDispatcher
 import com.sportzinteractive.baseprojectsetup.helper.*
-import com.sportzinteractive.baseprojectsetup.utils.Constants
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
