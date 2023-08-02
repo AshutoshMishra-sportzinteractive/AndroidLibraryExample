@@ -4,6 +4,7 @@ import com.sportzinteractive.baseprojectsetup.data.model.AuthBaseRequest
 import com.sportzinteractive.baseprojectsetup.data.model.BaseResponseData
 import com.sportzinteractive.baseprojectsetup.data.model.auth.AuthBaseResponse
 import com.sportzinteractive.baseprojectsetup.data.model.auth.SignInOtpRequest
+import com.sportzinteractive.baseprojectsetup.data.model.auth.UpdateUserProfileRequest
 import com.sportzinteractive.baseprojectsetup.data.model.otp.OTPResponse
 import com.sportzinteractive.baseprojectsetup.data.model.otp.SendEmailMobileOTPRequest
 import retrofit2.Response
@@ -30,6 +31,12 @@ interface AuthService {
     suspend fun signInWithOtp(
         @Url url: String,
         @Body signInOtpRequest: AuthBaseRequest<SignInOtpRequest>,
+    ): Response<AuthBaseResponse>
+
+    @POST
+    suspend fun updateUserProfile(
+        @Url url: String,
+        @Body updateUserProfileRequest: AuthBaseRequest<UpdateUserProfileRequest>
     ): Response<AuthBaseResponse>
 
 

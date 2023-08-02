@@ -3,9 +3,7 @@ package com.sportzinteractive.baseprojectsetup.business.domain
 import com.sportzinteractive.baseprojectsetup.data.mapper.auth.UserEntityMapper
 import com.sportzinteractive.baseprojectsetup.data.model.AuthBaseRequest
 import com.sportzinteractive.baseprojectsetup.data.model.BaseResponseData
-import com.sportzinteractive.baseprojectsetup.data.model.auth.OtpSignInState
-import com.sportzinteractive.baseprojectsetup.data.model.auth.SignInOtpRequest
-import com.sportzinteractive.baseprojectsetup.data.model.auth.User
+import com.sportzinteractive.baseprojectsetup.data.model.auth.*
 import com.sportzinteractive.baseprojectsetup.data.model.otp.OTPResponse
 import com.sportzinteractive.baseprojectsetup.data.model.otp.SendEmailMobileOTPRequest
 import com.sportzinteractive.baseprojectsetup.data.repository.AuthRepository
@@ -17,6 +15,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import retrofit2.Response
 import javax.inject.Inject
 
 
@@ -119,20 +118,20 @@ class AuthRepositoryImpl @Inject constructor(
                     if (body?.status == GenericStatusCode.SUCCESS.statusCode && data != null) {
                         when (data.status) {
                             AuthApiStatus.SUCCESS.statusCode, AuthApiStatus.DELETE_REQUEST_ACCOUNT.statusCode -> {
-                                val userTokenNullable = retrofitResponse
-                                    ?.headers()?.get(Constants.USER_TOKEN)
-                                if (data.userGuid != null && data.user != null && userTokenNullable != null) {
+//                                val userTokenNullable = retrofitResponse
+//                                    ?.headers()?.get(Constants.USER_TOKEN)
+                                if (data.userGuid != null && data.user != null && data.token != null) {
                                     baseLocalStorageManager.setCompleteProfile(true)
                                     saveUserInfo(
                                         userGuid = data.userGuid,
-                                        userToken = userTokenNullable,
+                                        userToken = data.token,
                                         user = userEntityMapper.toDomain(
                                             entity = data.user,
                                             email = data.email,
-                                            accountCreateDateTime = data.createdDateTime,
                                             status = data.status
                                         ),
-                                        userWafId = data.waf_id?:""
+                                        userWafId = data.waf_id?:"",
+                                        epochTimestamp = data.epoch_timestamp?:""
                                     )
                                     emit(OtpSignInState.Success(data.message ?: ""))
                                 } else {
@@ -140,20 +139,20 @@ class AuthRepositoryImpl @Inject constructor(
                                 }
                             }
                             AuthApiStatus.INCOMPLETE_USER_DATA.statusCode -> {
-                                val userTokenNullable = retrofitResponse
-                                    ?.headers()?.get(Constants.USER_TOKEN)
-                                if (data.userGuid != null && data.user != null && userTokenNullable != null) {
+//                                val userTokenNullable = retrofitResponse
+//                                    ?.headers()?.get(Constants.USER_TOKEN)
+                                if (data.userGuid != null && data.user != null && data.token != null) {
                                     baseLocalStorageManager.setCompleteProfile(false)
                                     saveUserInfo(
                                         userGuid = data.userGuid,
-                                        userToken = userTokenNullable,
+                                        userToken = data.token,
                                         user = userEntityMapper.toDomain(
                                             entity = data.user,
                                             email = data.email,
-                                            accountCreateDateTime = data.createdDateTime,
                                             status = data.status
                                         ),
-                                        userWafId = data.waf_id?:""
+                                        userWafId = data.waf_id?:"",
+                                        epochTimestamp = data.epoch_timestamp?:""
                                     )
                                     setIsOtpRequired(
                                         data.emailVerified ?: "",
@@ -178,11 +177,90 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun saveUserInfo(userGuid: String, userToken: String, user: User, userWafId:String) {
+    override fun updateUserProfile(
+        updateUserProfileRequest: UpdateUserProfileRequest,
+        url: String
+    ): Flow<Resource<UpdateUserProfileState?>> {
+        return flow {
+            val result = safeApiCall(dispatcher){
+                authService.updateUserProfile(
+                    url,
+                    updateUserProfileRequest = AuthBaseRequest(updateUserProfileRequest)
+                )
+            }
+            when (result) {
+                is ApiResult.GenericError -> emit(
+                    Resource.Error(
+                        NetworkThrowable(
+                            result.code,
+                            result.message.toString()
+                        )
+                    )
+                )
+                is ApiResult.NetworkError -> emit(
+                    Resource.Error(
+                        NetworkThrowable(
+                            null,
+                            result.message.toString()
+                        )
+                    )
+                )
+                is ApiResult.Success -> {
+                    val resource =
+                        object : ApiResultHandler<Response<AuthBaseResponse>, UpdateUserProfileState>(result) {
+                            override suspend fun handleSuccess(resultObj: Response<AuthBaseResponse>): Resource<UpdateUserProfileState?> {
+                                val retrofitResponse = result.data
+                                val body = result.data?.body()
+                                val errorCode = result.data?.code()
+                                val data = body?.responseData
+
+                                return if (data?.status == 1) {
+                                    val userEntity = data?.user
+                                    if (userEntity != null) {
+//                                        val userTokenNullable =
+//                                            retrofitResponse?.headers()?.get(Constants.USER_TOKEN)
+                                        val user = userEntityMapper.toDomain(
+                                            entity = data.user,
+                                            email = data.email,
+                                            status = data.status
+                                        )
+                                        if (data.userGuid != null && data.token != null) {
+                                            baseLocalStorageManager.setCompleteProfile(true)
+                                            saveUserInfo(
+                                                userGuid = data.userGuid,
+                                                userToken = data.token,
+                                                user = user,
+                                                userWafId = data.waf_id?:"",
+                                                epochTimestamp = data.epoch_timestamp?:""
+                                            )
+                                        }
+                                        Resource.Success(UpdateUserProfileState.Success(user))
+                                    } else {
+                                        Resource.Success(null)
+                                    }
+                                } else {
+                                    Resource.Error(
+                                        NetworkThrowable(
+                                            errorCode,
+                                            data?.message ?: ""
+                                        )
+                                    )
+                                }
+                            }
+                        }.getResult()
+                    emit(resource)
+                }
+
+            }
+        }
+    }
+
+    private suspend fun saveUserInfo(userGuid: String, userToken: String, user: User, userWafId:String,epochTimestamp:String) {
         baseLocalStorageManager.setUserGuid(userGuid)
         baseLocalStorageManager.setUserWafId(userWafId)
         baseLocalStorageManager.setUserToken(userToken)
         baseLocalStorageManager.setUser(user)
+        baseLocalStorageManager.setEpocTimeStamp(epochTimestamp)
     }
 
     private suspend fun setIsOtpRequired(emailVerified: String, mobileVerified: String) {

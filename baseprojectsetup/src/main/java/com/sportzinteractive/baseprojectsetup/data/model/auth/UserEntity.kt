@@ -4,8 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 
 data class UserEntity(
-    @SerializedName("name")
-    val name:String?,
     @SerializedName("first_name")
     val firstName: String?,
     @SerializedName("last_name")
@@ -36,6 +34,8 @@ data class UserEntity(
     val jerseyName: String?,
     @SerializedName("jersey_number")
     val jerseyNumber: Int?,
+    @SerializedName("ext_info")
+    val extInfo: ExtInfoEntity?,
     @SerializedName("profile_completion_percentage")
     val profileCompletionPercentage: String?,
     @SerializedName("social_user_image")
@@ -49,5 +49,8 @@ data class UserEntity(
     @SerializedName("accept_tnc")
     val acceptTermsAndCondition: Boolean?,
     @SerializedName("state_name")
-    val state: String?
+    val state: String?,
+    @SerializedName("state_id")
+    val stateId: String?
+
 )

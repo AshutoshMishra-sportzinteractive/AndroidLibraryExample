@@ -5,3 +5,8 @@ sealed class OtpSignInState {
     class IncompleteProfile(val message: String) : OtpSignInState()
     class Failure(val message: String) : OtpSignInState()
 }
+
+sealed class UpdateUserProfileState {
+    class Success(val user:User) : UpdateUserProfileState()
+    class Failure(val message: String) : OtpSignInState()
+}

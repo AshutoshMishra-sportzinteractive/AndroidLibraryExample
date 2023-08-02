@@ -1,7 +1,6 @@
 package com.sportzinteractive.baseprojectsetup.data.model.auth
 
 import com.google.gson.annotations.SerializedName
-import com.sportzinteractive.baseprojectsetup.BuildConfig
 
 data class SignInOtpRequest(
     @SerializedName("captcha")

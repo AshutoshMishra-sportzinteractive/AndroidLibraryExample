@@ -24,6 +24,8 @@ class BaseLocalStorageManager @Inject constructor(
 
     private val userGuidKey = stringPreferencesKey("user_guid")
 
+    private val epochTimestamp = stringPreferencesKey("epoch_timestamp")
+
     private val userWafId = stringPreferencesKey("userWafId")
 
     private val userTokenKey = stringPreferencesKey("token")
@@ -56,6 +58,14 @@ class BaseLocalStorageManager @Inject constructor(
 
     suspend fun setUserWafId(userGuid: String) {
         dataStore.edit { prefs -> prefs[userWafId] = userGuid }
+    }
+
+    fun getEpocTimeStamp(): Flow<String?> {
+        return dataStore.data.map { prefs -> prefs[epochTimestamp] }
+    }
+
+    suspend fun setEpocTimeStamp(epocTimeStamp: String) {
+        dataStore.edit { prefs -> prefs[epochTimestamp] = epocTimeStamp }
     }
 
     fun getUserWafId(): Flow<String?> {

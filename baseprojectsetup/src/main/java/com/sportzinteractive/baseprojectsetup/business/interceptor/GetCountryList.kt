@@ -17,7 +17,7 @@ class GetCountryList @Inject constructor(
     @DefaultDispatcher private val dispatcher: CoroutineDispatcher
 ){
 
-    operator fun invoke(url:String,defaultCountryId:String="101"): Flow<Resource<CountryListState>> {
+    operator fun invoke(url:String,defaultCountryCode:String="91"): Flow<Resource<CountryListState>> {
         return generalRepository.getCountryList(url).map {
             when(it) {
                 is Resource.Error -> Resource.Error(throwable = it.throwable)
@@ -25,7 +25,7 @@ class GetCountryList @Inject constructor(
                 else -> {
                     val filteredList = it.data?.filter { e -> e.phoneCode!=0 }
                     val index = withContext(dispatcher) {
-                        filteredList?.indexOfFirst { country -> country.countryId.toString() == defaultCountryId } ?: 0
+                        filteredList?.indexOfFirst { country -> country.phoneCode.toString() == defaultCountryCode } ?: 0
                     }
 
                     Resource.Success(

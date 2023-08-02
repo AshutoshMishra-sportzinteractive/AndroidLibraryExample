@@ -10,10 +10,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UserEntityMapper @Inject constructor(): EntityDomainMapper<UserEntity, User> {
+class UserEntityMapper @Inject constructor(
+    private val extInfoMapper: ExtInfoMapper,
+): EntityDomainMapper<UserEntity, User> {
     override fun toEntity(domain: User): UserEntity {
         return UserEntity(
-            name = domain.name,
             firstName = domain.firstName,
             lastName = domain.lastName,
             dob = domain.dob,
@@ -29,19 +30,20 @@ class UserEntityMapper @Inject constructor(): EntityDomainMapper<UserEntity, Use
             favouriteClub = domain.favouriteClub,
             jerseyName = domain.jerseyName,
             jerseyNumber = domain.jerseyNumber,
+            extInfo = extInfoMapper.toEntity(domain.extInfo),
             profileCompletionPercentage = domain.profileCompletionPercentage,
             socialUserImage = domain.socialUserImage,
             socialUserName = domain.socialUserName,
             subscribeForEmail = domain.subscribeForEmail,
             subscribeForWhatsapp = domain.subscribeWhatsApp,
             acceptTermsAndCondition = domain.termsAndCondition,
-            state = domain.state
+            state = domain.state,
+            stateId = domain.stateId
         )
     }
 
     override fun toDomain(entity: UserEntity): User {
         return User(
-            name = entity.name,
             city = entity.city,
             countryId = entity.countryId,
             countryName = entity.countryName,
@@ -57,6 +59,7 @@ class UserEntityMapper @Inject constructor(): EntityDomainMapper<UserEntity, Use
             pinCode = entity.pinCode,
             jerseyName = entity.jerseyName,
             jerseyNumber = entity.jerseyNumber,
+            extInfo = extInfoMapper.toDomain(entity.extInfo),
             profileCompletionPercentage = entity.profileCompletionPercentage,
             socialUserImage = entity.socialUserImage,
             socialUserName = entity.socialUserName,
@@ -66,23 +69,16 @@ class UserEntityMapper @Inject constructor(): EntityDomainMapper<UserEntity, Use
             email = null,
             password = null,
             confirmPassword = null,
-            accountCreateDateTime = null,
-            accountCreateDate = null,
             status = null,
-            state = entity.state
+            state = entity.state,
+            stateId = entity.stateId
         )
     }
 
-    fun toDomain(entity: UserEntity, email: String?, accountCreateDateTime: String?,status:Int?): User {
+    fun toDomain(entity: UserEntity, email: String?,status:Int?): User {
         return toDomain(entity)
             .copy(
                 email = email,
-                accountCreateDateTime = accountCreateDateTime,
-                accountCreateDate = CalendarUtils.convertDateStringToSpecifiedDateString(
-                    dateString = accountCreateDateTime,
-                    dateFormat = "yyyy-MM-dd hh:mm:ss.SSSSSS", //2021-12-02 11:01:51.481968
-                    requiredDateFormat = "MMM dd, yyyy"
-                ),
                 status = status
             )
     }

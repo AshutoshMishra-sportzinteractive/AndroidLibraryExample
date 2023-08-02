@@ -3,7 +3,6 @@ package com.sportzinteractive.baseprojectsetup.data.model.auth
 import java.io.Serializable
 
 data class User(
-    val name:String?,
     val city: String?,
     val countryId: String?,
     val countryName: String?,
@@ -19,6 +18,7 @@ data class User(
     val pinCode: String?,
     val jerseyName: String?,
     val jerseyNumber: Int?,
+    val extInfo: ExtInfo?,
     val profileCompletionPercentage: String?,
     val socialUserImage: String?,
     val socialUserName: String?,
@@ -28,10 +28,9 @@ data class User(
     val email: String?,
     val password: String?,
     val confirmPassword: String?,
-    val accountCreateDateTime: String?,
-    val accountCreateDate: String?,
     val status:Int?,
-    val state: String?
+    val state: String?,
+    val stateId:String?,
 ) : Serializable {
 
     constructor(
@@ -44,15 +43,17 @@ data class User(
         pinCode: String?,
         favouritePlayerId: String?,
         jerseyName: String?,
+        extInfo: ExtInfo?,
         jerseyNumber: Int?,
         countryId: String?,
         city: String?,
         subscribeForEmail: Boolean?,
         favouritePlayerName: Any?,
         favouriteClub: String?,
-        socialUserImage: String?
+        socialUserImage: String?,
+        stateId: String?,
+        stateName:String?
     ) : this(
-        name = null,
         city = city,
         countryId = countryId,
         countryName = null,
@@ -68,6 +69,7 @@ data class User(
         pinCode = pinCode,
         jerseyName = jerseyName,
         jerseyNumber = jerseyNumber,
+        extInfo = extInfo,
         profileCompletionPercentage = null,
         socialUserImage = socialUserImage,
         socialUserName = null,
@@ -77,9 +79,8 @@ data class User(
         email = null,
         password = null,
         confirmPassword = null,
-        accountCreateDateTime = null,
-        accountCreateDate = null,
         status = null,
-        state = null
+        state = stateName,
+        stateId = stateId
     )
 }
