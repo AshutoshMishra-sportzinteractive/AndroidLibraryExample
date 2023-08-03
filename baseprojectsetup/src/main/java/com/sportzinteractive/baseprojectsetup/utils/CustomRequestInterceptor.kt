@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @Singleton
 class CustomRequestInterceptor @Inject constructor(
-    val customValues: CustomValues
+    private val customValues: CustomValues
 ) : Interceptor {
 
     @Throws(IllegalArgumentException::class)

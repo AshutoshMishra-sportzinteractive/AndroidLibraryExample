@@ -10,6 +10,7 @@ import com.sportzinteractive.baseprojectsetup.data.repository.AuthRepository
 import com.sportzinteractive.baseprojectsetup.data.services.AuthService
 import com.sportzinteractive.baseprojectsetup.di.IoDispatcher
 import com.sportzinteractive.baseprojectsetup.helper.*
+import com.sportzinteractive.baseprojectsetup.utils.Constants
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -117,13 +118,14 @@ class AuthRepositoryImpl @Inject constructor(
                     if (body?.status == GenericStatusCode.SUCCESS.statusCode && data != null) {
                         when (data.status) {
                             AuthApiStatus.SUCCESS.statusCode, AuthApiStatus.DELETE_REQUEST_ACCOUNT.statusCode -> {
-//                                val userTokenNullable = retrofitResponse
-//                                    ?.headers()?.get(Constants.USER_TOKEN)
+                                val userTokenNullable = retrofitResponse
+                                    ?.headers()?.get(Constants.USER_TOKEN)
                                 if (data.userGuid != null && data.user != null && data.token != null) {
                                     baseLocalStorageManager.setCompleteProfile(true)
                                     saveUserInfo(
                                         userGuid = data.userGuid,
-                                        userToken = data.token,
+                                        userToken = userTokenNullable?:"",
+                                        token= data.token,
                                         user = userEntityMapper.toDomain(
                                             entity = data.user,
                                             email = data.email,
@@ -138,13 +140,14 @@ class AuthRepositoryImpl @Inject constructor(
                                 }
                             }
                             AuthApiStatus.INCOMPLETE_USER_DATA.statusCode -> {
-//                                val userTokenNullable = retrofitResponse
-//                                    ?.headers()?.get(Constants.USER_TOKEN)
+                                val userTokenNullable = retrofitResponse
+                                    ?.headers()?.get(Constants.USER_TOKEN)
                                 if (data.userGuid != null && data.user != null && data.token != null) {
                                     baseLocalStorageManager.setCompleteProfile(false)
                                     saveUserInfo(
                                         userGuid = data.userGuid,
-                                        userToken = data.token,
+                                        userToken = userTokenNullable?:"",
+                                        token= data.token,
                                         user = userEntityMapper.toDomain(
                                             entity = data.user,
                                             email = data.email,
@@ -216,8 +219,8 @@ class AuthRepositoryImpl @Inject constructor(
                                 return if (data?.status == 1) {
                                     val userEntity = data?.user
                                     if (userEntity != null) {
-//                                        val userTokenNullable =
-//                                            retrofitResponse?.headers()?.get(Constants.USER_TOKEN)
+                                        val userTokenNullable =
+                                            retrofitResponse?.headers()?.get(Constants.USER_TOKEN)
                                         val user = userEntityMapper.toDomain(
                                             entity = data.user,
                                             email = data.email,
@@ -227,7 +230,8 @@ class AuthRepositoryImpl @Inject constructor(
                                             baseLocalStorageManager.setCompleteProfile(true)
                                             saveUserInfo(
                                                 userGuid = data.userGuid,
-                                                userToken = data.token,
+                                                userToken = userTokenNullable?:"",
+                                                token= data.token,
                                                 user = user,
                                                 userWafId = data.waf_id?:"",
                                                 epochTimestamp = data.epoch_timestamp?:""
@@ -254,10 +258,11 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun saveUserInfo(userGuid: String, userToken: String, user: User, userWafId:String,epochTimestamp:String) {
+    private suspend fun saveUserInfo(userGuid: String, userToken: String,token:String, user: User, userWafId:String,epochTimestamp:String) {
         baseLocalStorageManager.setUserGuid(userGuid)
         baseLocalStorageManager.setUserWafId(userWafId)
         baseLocalStorageManager.setUserToken(userToken)
+        baseLocalStorageManager.setToken(token)
         baseLocalStorageManager.setUser(user)
         baseLocalStorageManager.setEpocTimeStamp(epochTimestamp)
     }
