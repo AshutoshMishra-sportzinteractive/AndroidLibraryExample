@@ -28,7 +28,6 @@ object AppModule {
         return CustomValues("https://stg-rr.sportz.io/",
         "",
         "DemoApp",
-        "",
         "6LdGSk0jAAAAAJFbgHx-wVyd4M5L_7Y_NHSa1GZW",
         BuildConfig.DEBUG)
     }

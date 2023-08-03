@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), CaptchaListener {
+class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var appName: String
@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), CaptchaListener {
         }
     }
 
-    override fun getCaptcha(captcha: String) {
-        showToast(captcha)
-    }
+//    override fun getCaptcha(captcha: String,) {
+//        showToast(captcha)
+//    }
 }
