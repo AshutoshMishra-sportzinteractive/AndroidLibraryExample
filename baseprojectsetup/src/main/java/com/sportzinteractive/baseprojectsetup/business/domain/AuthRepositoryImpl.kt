@@ -182,7 +182,7 @@ class AuthRepositoryImpl @Inject constructor(
     override fun updateUserProfile(
         updateUserProfileRequest: UpdateUserProfileRequest,
         url: String
-    ): Flow<Resource<UpdateUserProfileState?>> {
+    ): Flow<Resource<User?>> {
         return flow {
             val result = safeApiCall(dispatcher){
                 authService.updateUserProfile(
@@ -209,8 +209,8 @@ class AuthRepositoryImpl @Inject constructor(
                 )
                 is ApiResult.Success -> {
                     val resource =
-                        object : ApiResultHandler<Response<AuthBaseResponse>, UpdateUserProfileState>(result) {
-                            override suspend fun handleSuccess(resultObj: Response<AuthBaseResponse>): Resource<UpdateUserProfileState?> {
+                        object : ApiResultHandler<Response<AuthBaseResponse>, User>(result) {
+                            override suspend fun handleSuccess(resultObj: Response<AuthBaseResponse>): Resource<User?> {
                                 val retrofitResponse = result.data
                                 val body = result.data?.body()
                                 val errorCode = result.data?.code()
@@ -237,7 +237,7 @@ class AuthRepositoryImpl @Inject constructor(
                                                 epochTimestamp = data.epoch_timestamp?:""
                                             )
                                         }
-                                        Resource.Success(UpdateUserProfileState.Success(user))
+                                        Resource.Success(user)
                                     } else {
                                         Resource.Success(null)
                                     }
