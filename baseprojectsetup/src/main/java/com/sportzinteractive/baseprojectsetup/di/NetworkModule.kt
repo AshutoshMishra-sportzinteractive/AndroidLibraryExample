@@ -26,6 +26,7 @@ object NetworkModule {
     @Singleton
     fun gson(): Gson = GsonBuilder().create()
 
+
     @Singleton
     @Provides
     fun providesHttpLoggingInterceptor(): HttpLoggingInterceptor {
