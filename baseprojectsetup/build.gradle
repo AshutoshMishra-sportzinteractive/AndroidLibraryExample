@@ -94,7 +94,7 @@ afterEvaluate {
 
                 groupId = 'com.github.AshutoshMishra-sportzinteractive'
                 artifactId = 'sportz-interactive-library'
-                version = '3.0'
+                version = '3.1'
             }
         }
     }
