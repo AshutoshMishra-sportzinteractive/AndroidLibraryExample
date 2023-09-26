@@ -1,6 +1,6 @@
 package com.sportzinteractive.baseprojectsetup.utils
 
-import com.sportzinteractive.baseprojectsetup.constants.CustomValues
+import com.sportzinteractive.baseprojectsetup.constants.BaseInfo
 import com.sportzinteractive.baseprojectsetup.helper.BaseLocalStorageManager
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
@@ -12,18 +12,18 @@ import javax.inject.Singleton
 
 @Singleton
 class CustomRequestInterceptor @Inject constructor(
-    private val customValues: CustomValues,
+    private val baseInfo: BaseInfo,
     private val baseLocalStorageManager: BaseLocalStorageManager
 ) : Interceptor {
 
     @Throws(IllegalArgumentException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val builder = chain.request().newBuilder()
-        builder.addHeader("auth", customValues.apiAuthKey)
+        builder.addHeader("auth", baseInfo.getApiAuthKey())
         val token = runBlocking { baseLocalStorageManager.getUserToken().firstOrNull()?:"" }
         token?.let {
             builder.addHeader("usertoken", it)
         }
-        return chain.proceed(builder.build());
+        return chain.proceed(builder.build())
     }
 }

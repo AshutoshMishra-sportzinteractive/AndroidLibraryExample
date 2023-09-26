@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.*
 import androidx.fragment.app.FragmentManager
-import com.sportzinteractive.baseprojectsetup.constants.CustomValues
+import com.sportzinteractive.baseprojectsetup.constants.BaseInfo
 import com.sportzinteractive.baseprojectsetup.databinding.CaptchaDialogBinding
 import com.sportzinteractive.baseprojectsetup.ui.common.BaseVBDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +24,9 @@ interface CaptchaListener{
 class CaptchaDialog : BaseVBDialogFragment<CaptchaDialogBinding>(CaptchaDialogBinding::inflate) {
 
     @Inject
-    lateinit var customValues: CustomValues
+    lateinit var baseInfo: BaseInfo
+
+
 
     companion object {
         private lateinit var listener: CaptchaListener
@@ -58,12 +60,12 @@ class CaptchaDialog : BaseVBDialogFragment<CaptchaDialogBinding>(CaptchaDialogBi
         val data = "<html>\n" +
                 "  <head>\n" +
                 "    <title>reCAPTCHA demo: Simple page</title>\n" +
-                "    <script src=\"https://www.google.com/recaptcha/api.js?render=${customValues.captchaSiteKey}\"></script>\n" +
+                "    <script src=\"https://www.google.com/recaptcha/api.js?render=${baseInfo.getCaptchaSiteKey()}\"></script>\n" +
                 "<script type=\"text/javascript\">\n" +
                 "    grecaptcha.ready(function() {\n" +
                 "    // do request for recaptcha token\n" +
                 "    // response is promise with passed token\n" +
-                "        grecaptcha.execute('${customValues.captchaSiteKey}', {action:'validate_captcha'})\n" +
+                "        grecaptcha.execute('${baseInfo.getCaptchaSiteKey()}', {action:'validate_captcha'})\n" +
                 "                  .then(function(token) {\n" +
                 "            // add token value to form\n" +
                 "             CaptchaDialog.reCaptchaCallbackInAndroid(token);\n" +
@@ -78,7 +80,7 @@ class CaptchaDialog : BaseVBDialogFragment<CaptchaDialogBinding>(CaptchaDialogBi
                 "    </form>\n" +
                 "  </body>\n" +
                 "</html>"
-        binding?.captchaWebView?.loadDataWithBaseURL(customValues.baseUrl, data, "text/html", "UTF-8", null)
+        binding?.captchaWebView?.loadDataWithBaseURL(baseInfo.getBaseUrl(), data, "text/html", "UTF-8", null)
     }
 
     private fun setWebViewClient() {

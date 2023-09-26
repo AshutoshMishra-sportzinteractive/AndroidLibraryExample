@@ -1,7 +1,7 @@
 package com.sportzinteractive.baseprojectsetup.utils
 
 import com.rajasthanroyals.app.utils.CurlPrinter
-import com.sportzinteractive.baseprojectsetup.constants.CustomValues
+import com.sportzinteractive.baseprojectsetup.constants.BaseInfo
 import okhttp3.Interceptor
 import okhttp3.Response
 import okio.Buffer
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 @Singleton
 class CurlLoggingInterceptor @Inject constructor(
     var tag: String,
-    val customValues: CustomValues
+    val baseInfo: BaseInfo
     ) : Interceptor {
     private val UTF8 = Charset.forName("UTF-8")
     private var stringBuffer: StringBuffer? = null
@@ -52,7 +52,7 @@ class CurlLoggingInterceptor @Inject constructor(
         this.stringBuffer!!.append(" \"").append(request.url.toString()).append("\"")
         this.stringBuffer!!.append(" -L")
 
-        if (customValues.isDebugMode) {
+        if (baseInfo.getIsDebugMode()) {
             CurlPrinter.print(tag, request.url.toString(), this.stringBuffer!!.toString())
         }
         return chain.proceed(request)

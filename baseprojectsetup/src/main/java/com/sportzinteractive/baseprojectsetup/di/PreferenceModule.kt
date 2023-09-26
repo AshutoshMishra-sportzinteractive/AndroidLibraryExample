@@ -5,7 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import com.sportzinteractive.baseprojectsetup.constants.CustomValues
+import com.sportzinteractive.baseprojectsetup.constants.BaseInfo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,10 +19,10 @@ object PreferenceModule {
 
     @Provides
     @Singleton
-    fun providePreferencesFantasyDataStore(@ApplicationContext appContext: Context,customValues: CustomValues): DataStore<Preferences> =
+    fun providePreferencesFantasyDataStore(@ApplicationContext appContext: Context,baseInfo: BaseInfo): DataStore<Preferences> =
         PreferenceDataStoreFactory.create(
             produceFile = {
-                appContext.preferencesDataStoreFile(customValues.preferenceDataStoreFileName)
+                appContext.preferencesDataStoreFile(baseInfo.getPreferenceDataStoreName())
             }
         )
 

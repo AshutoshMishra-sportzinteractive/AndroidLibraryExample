@@ -19,4 +19,8 @@ data class SignInOtpRequest(
     val platform_type: Int? = 2,
     @SerializedName("platform_version")
     val platform_version: String? = "",
+    @SerializedName("accept_tnc")
+    val acceptTnc: Boolean= true,
+    @SerializedName("accept_disclaimer")
+    val acceptDisclaimer: Boolean = true,
 )

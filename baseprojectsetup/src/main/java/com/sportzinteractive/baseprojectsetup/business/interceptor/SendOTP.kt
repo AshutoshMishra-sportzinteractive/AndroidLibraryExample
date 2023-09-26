@@ -1,14 +1,11 @@
 package com.sportzinteractive.baseprojectsetup.business.interceptor
 
-import com.sportzinteractive.baseprojectsetup.data.model.AuthBaseRequest
 import com.sportzinteractive.baseprojectsetup.data.model.otp.OTPResponse
 import com.sportzinteractive.baseprojectsetup.data.model.otp.SendEmailMobileOTPRequest
 import com.sportzinteractive.baseprojectsetup.data.repository.AuthRepository
 import com.sportzinteractive.baseprojectsetup.helper.Resource
 import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import retrofit2.Response
 import javax.inject.Inject
 
 @ViewModelScoped

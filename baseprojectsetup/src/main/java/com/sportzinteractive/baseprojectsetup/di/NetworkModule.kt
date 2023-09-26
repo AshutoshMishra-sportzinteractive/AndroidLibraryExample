@@ -3,7 +3,8 @@ package com.sportzinteractive.baseprojectsetup.di
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.sportzinteractive.baseprojectsetup.constants.CustomValues
+import com.sportzinteractive.baseprojectsetup.constants.BaseInfo
+import com.sportzinteractive.baseprojectsetup.di.qualifier.*
 import com.sportzinteractive.baseprojectsetup.utils.CurlLoggingInterceptor
 import com.sportzinteractive.baseprojectsetup.utils.CustomRequestInterceptor
 import dagger.Module
@@ -35,24 +36,45 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun providesCurlInterceptor(customValues: CustomValues): CurlLoggingInterceptor {
-        return CurlLoggingInterceptor("cURL",customValues)
+    fun providesCurlInterceptor(baseInfo: BaseInfo): CurlLoggingInterceptor {
+        return CurlLoggingInterceptor("cURL",baseInfo)
     }
 
     @Singleton
     @Provides
+    @DefaultOkHttps
     fun providesOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         curlLoggingInterceptor: CurlLoggingInterceptor,
         customRequestInterceptor: CustomRequestInterceptor,
-        customValues: CustomValues
+        baseInfo: BaseInfo
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            .readTimeout(15, TimeUnit.SECONDS)
-            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(30, TimeUnit.SECONDS)
             .addNetworkInterceptor(customRequestInterceptor)
             .apply {
-                if (customValues.isDebugMode) {
+                if (baseInfo.getIsDebugMode()) {
+                    addInterceptor(httpLoggingInterceptor)
+                    addInterceptor(curlLoggingInterceptor)
+                    addNetworkInterceptor(StethoInterceptor())
+                }
+            }.build()
+    }
+
+    @Singleton
+    @Provides
+    @NotificationOkHttps
+    fun providesNotificationOkHttpClient(
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        curlLoggingInterceptor: CurlLoggingInterceptor,
+        baseInfo: BaseInfo
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .readTimeout(30, TimeUnit.SECONDS)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .apply {
+                if (baseInfo.getIsDebugMode()) {
                     addInterceptor(httpLoggingInterceptor)
                     addInterceptor(curlLoggingInterceptor)
                     addNetworkInterceptor(StethoInterceptor())
@@ -69,16 +91,30 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @DefaultRetrofit
     fun provideRetrofit(
-        okHttpClient: OkHttpClient,
+        @DefaultOkHttps okHttpClient: OkHttpClient,
         gsonConverterFactory: GsonConverterFactory,
-        customValues: CustomValues
+        baseInfo: BaseInfo
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl(customValues.baseUrl)
+            .baseUrl(baseInfo.getBaseUrl())
             .addConverterFactory(gsonConverterFactory)
             .client(okHttpClient)
             .build()
 
 
+    @Provides
+    @Singleton
+    @NotificationRetrofit
+    fun provideNotificationRetrofit(
+        @NotificationOkHttps okHttpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory,
+        baseInfo: BaseInfo
+    ): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(baseInfo.getBaseUrl())
+            .addConverterFactory(gsonConverterFactory)
+            .client(okHttpClient)
+            .build()
 }

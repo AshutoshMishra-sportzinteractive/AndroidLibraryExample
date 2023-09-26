@@ -24,23 +24,34 @@ class BaseLocalStorageManager @Inject constructor(
 
     private val userGuidKey = stringPreferencesKey("user_guid")
 
-    private val epochTimestamp = stringPreferencesKey("epoch_timestamp")
+    //private val epochTimestamp = stringPreferencesKey("epoch_timestamp")
 
     private val userWafId = stringPreferencesKey("userWafId")
 
     private val userTokenKey = stringPreferencesKey("user_token")
 
-    private val tokenKey = stringPreferencesKey("token")
+    //private val tokenKey = stringPreferencesKey("token")
 
 
     private val userInfoKey = stringPreferencesKey("user")
 
     private val emailVerified = booleanPreferencesKey("emailVerified")
 
+    private val selectedValue = stringPreferencesKey("selectedMenuData")
+
+    private val isQuizClickedWithoutLogin = booleanPreferencesKey("isQuizClickedWithoutLogin")
+
+
+
     private val mobileVerified = booleanPreferencesKey("mobileVerified")
 
+    private val isSkip = booleanPreferencesKey("isSkip")
 
+    private val isNotificationFirstTime = booleanPreferencesKey("is_notification_first_time")
 
+    private val isNotificationLogin = booleanPreferencesKey("is_notification_login")
+
+    private val teamIdFollowTeamId = stringPreferencesKey("team_id_follow_team_id")
 
 
     suspend fun setCompleteProfile(isComplete: Boolean) {
@@ -67,13 +78,13 @@ class BaseLocalStorageManager @Inject constructor(
         return dataStore.data.map { prefs -> prefs[userWafId] }
     }
 
-    fun getEpocTimeStamp(): Flow<String?> {
-        return dataStore.data.map { prefs -> prefs[epochTimestamp] }
-    }
-
-    suspend fun setEpocTimeStamp(epocTimeStamp: String) {
-        dataStore.edit { prefs -> prefs[epochTimestamp] = epocTimeStamp }
-    }
+//    fun getEpocTimeStamp(): Flow<String?> {
+//        return dataStore.data.map { prefs -> prefs[epochTimestamp] }
+//    }
+//
+//    suspend fun setEpocTimeStamp(epocTimeStamp: String) {
+//        dataStore.edit { prefs -> prefs[epochTimestamp] = epocTimeStamp }
+//    }
 
 
 
@@ -85,13 +96,13 @@ class BaseLocalStorageManager @Inject constructor(
         return dataStore.data.map { prefs -> prefs[userTokenKey] }
     }
 
-    suspend fun setToken(token: String) {
-        dataStore.edit { prefs -> prefs[tokenKey] = token }
-    }
-
-    fun getToken(): Flow<String?> {
-        return dataStore.data.map { prefs -> prefs[tokenKey] }
-    }
+//    suspend fun setToken(token: String) {
+//        dataStore.edit { prefs -> prefs[tokenKey] = token }
+//    }
+//
+//    fun getToken(): Flow<String?> {
+//        return dataStore.data.map { prefs -> prefs[tokenKey] }
+//    }
 
     suspend fun setUser(user: User) {
         dataStore.edit { prefs -> prefs[userInfoKey] = gson.toJson(user) }
@@ -131,6 +142,22 @@ class BaseLocalStorageManager @Inject constructor(
         }
     }
 
+    suspend fun setSelectedValue(data: String) {
+        dataStore.edit { prefs -> prefs[selectedValue] = data }
+    }
+
+    fun getSelectedValue(): Flow<String?> {
+        return dataStore.data.map { prefs -> prefs[selectedValue] }
+    }
+
+    suspend fun setISQuizClickedWithoutLogin(isQuizClicked: Boolean) {
+        dataStore.edit { prefs -> prefs[isQuizClickedWithoutLogin] = isQuizClicked }
+    }
+
+    fun getISQuizClickedWithoutLogin(): Flow<Boolean?> {
+        return dataStore.data.map { prefs -> prefs[isQuizClickedWithoutLogin]?:false }
+    }
+
     suspend fun removeAll() {
         removeUserWafId()
         removeUserGuid()
@@ -154,10 +181,22 @@ class BaseLocalStorageManager @Inject constructor(
     suspend fun removeUserToken() {
         dataStore.edit { prefs -> prefs.remove(userTokenKey) }
     }
+
     suspend fun removeProfile() {
         dataStore.edit { prefs -> prefs.remove(isCompleteProfile) }
     }
 
+    suspend fun setSkip(isFirst: Boolean) {
+        dataStore.edit { prefs -> prefs[isSkip] = isFirst }
+    }
+
+    private fun getSkip(): Flow<Boolean?> {
+        return dataStore.data.map { prefs -> prefs[isSkip] ?: false }
+    }
+
+    suspend fun isSkip(): Boolean {
+        return getSkip().firstOrNull() ?: false
+    }
 
 
     suspend fun isLoggedIn(): Boolean {
@@ -165,5 +204,41 @@ class BaseLocalStorageManager @Inject constructor(
                 && getUserGuid().firstOrNull() != null
                 && getUserToken().firstOrNull() != null
                 && getCompleteProfile().firstOrNull() == true
+    }
+
+    suspend fun setIsNotificationFirstTime(case: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[isNotificationFirstTime] = case
+        }
+    }
+
+    fun getIsNotificationFirstTime(): Flow<Boolean> {
+        return dataStore.data.map { prefs ->
+            prefs[isNotificationFirstTime] ?: true
+        }
+    }
+
+    /*suspend fun setIsNotificationLogin(case: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[isNotificationLogin] = case
+        }
+    }
+
+    fun getIsNotificationLogin(): Flow<Boolean> {
+        return dataStore.data.map { prefs ->
+            prefs[isNotificationLogin] ?: true
+        }
+    }*/
+
+    suspend fun setTeamIdFollowTeamId(case: String) {
+        dataStore.edit { prefs ->
+            prefs[teamIdFollowTeamId] = case
+        }
+    }
+
+    fun getTeamIdFollowTeamId(): Flow<String> {
+        return dataStore.data.map { prefs ->
+            prefs[teamIdFollowTeamId] ?: ""
+        }
     }
 }

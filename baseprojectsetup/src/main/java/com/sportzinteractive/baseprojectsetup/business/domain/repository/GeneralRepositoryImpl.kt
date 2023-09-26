@@ -1,5 +1,6 @@
-package com.sportzinteractive.baseprojectsetup.business.domain
+package com.sportzinteractive.baseprojectsetup.business.domain.repository
 
+import com.sportzinteractive.baseprojectsetup.constants.BaseInfo
 import com.sportzinteractive.baseprojectsetup.data.model.BaseResponse
 import com.sportzinteractive.baseprojectsetup.data.model.country.Countries
 import com.sportzinteractive.baseprojectsetup.data.model.country.Country
@@ -18,7 +19,8 @@ import javax.inject.Inject
 @ViewModelScoped
 class GeneralRepositoryImpl @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
-    private val generalService: GeneralService
+    private val generalService: GeneralService,
+    private val baseInfo: BaseInfo
 ) : GeneralRepository {
 
 
@@ -26,7 +28,6 @@ class GeneralRepositoryImpl @Inject constructor(
     override fun getCountryList(url:String): Flow<Resource<List<Country>?>> {
         return flow {
             emit(Resource.Loading())
-            //val url = "https://stg-rr.sportz.io/apiv3/getcountrystatecity"
             val result = safeApiCall(dispatcher) {
                 generalService.getCountryList(url = url)
             }

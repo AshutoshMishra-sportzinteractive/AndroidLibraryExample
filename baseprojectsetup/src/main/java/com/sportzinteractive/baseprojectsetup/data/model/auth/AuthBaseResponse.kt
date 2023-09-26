@@ -42,11 +42,7 @@ data class ResponseData(
     @SerializedName("created_date")
     val createdDateTime: String?,
     @SerializedName("is_first_login")
-    val isFirstTimeLogin: String?,
-    @SerializedName("token")
-    val token: String?,
-    @SerializedName("epoch_timestamp")
-    val epoch_timestamp: String?,
+    val isFirstTimeLogin: String?
 
 ) : Serializable
 

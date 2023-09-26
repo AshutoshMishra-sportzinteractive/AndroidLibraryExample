@@ -1,8 +1,10 @@
 package com.sportzinteractive.baseprojectsetup.utils
 
-import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
 object CalendarUtils {
@@ -10,6 +12,7 @@ object CalendarUtils {
     const val PUBLISHED_DATE_FORMAT = "yyyy-MM-dd'T'hh:mm:ss"
     const val PUBLISHED_ASSET_LIST = "yyyy-MM-dd'T'HH:mm:ss"
     const val PUBLISHED_ASSET_DETAILS = "yyyy-MM-dd HH:mm:ss"
+
     const val PUBLISHED_DISPLAY_DATE_FORMAT = "dd MMM, yyyy"
 
     const val FIXTURE_MATCH_DATE_FORMAT = "dd/MM/yyyy HH:mm:ss"
@@ -19,6 +22,12 @@ object CalendarUtils {
     const val SCORE_CARD_MATCH_DATE_FORMAT = "yyyy-MM-dd'T'HH:mmZ"
 
     const val DOB_DATE_FORMAT = "yyyy-MM-dd"
+    const val MATCH_DAY = "EEEE dd MMM yyyy"
+    const val MATCH_TIME = "HH:mm"
+
+    const val MATCH_DATE_FORMAT = "MM/dd/yyyy"
+    const val MATCH_REQUIRED_DATE_FORMAT = "EEEE dd MMM yyyy"
+    const val DOB_DATE_DISPLAY_FORMAT = "dd/MM/yyyy"
 
     fun convertDateStringToSpecifiedDateString(
         dateString: String?,
@@ -44,11 +53,8 @@ object CalendarUtils {
     }
 
     fun getCurrentDate(): String {
-        val c = Calendar.getInstance(TimeZone.getDefault(), Locale.ENGLISH)
-        val year = c.get(Calendar.YEAR)
-        val month = c.get(Calendar.MONTH) + 1
-        val day = c.get(Calendar.DAY_OF_MONTH)
-        return "$year-${month}-$day"
+        val simpleDateFormat = SimpleDateFormat(DOB_DATE_FORMAT)
+        return simpleDateFormat.format(Date())
     }
 
     fun getDaysBetweenDates(currentDate: String, pastDate: String): Int {
@@ -136,6 +142,55 @@ object CalendarUtils {
         }
     }
 
+    fun getPublishedDuration(
+        dateString: String?,
+        dateFormat: String,
+        inputLocale: Locale = Locale.ENGLISH
+    ): String? {
+
+        try {
+            if (dateString == null) {
+                return null
+            }
+            val simpleDateFormat = SimpleDateFormat(dateFormat, inputLocale)
+            val date = simpleDateFormat.parse(dateString) ?: return null
+
+
+            val publishedDuration = System.currentTimeMillis() - date.time
+
+            val days = (TimeUnit.MILLISECONDS.toDays(publishedDuration)).toInt()
+
+            if(days >= 365)
+                return (days/365).toString() + "y"
+
+            if(days >= 30)
+                return (days/30).toString() + "m"
+
+            if(days >= 7)
+                return (days/7).toString() + "w"
+
+            if(days >= 1)
+                return (days).toString() + "d"
+
+            val hours = (TimeUnit.MILLISECONDS.toHours(publishedDuration)).toInt()
+            if (hours >= 1)
+                return hours.toString() + "h"
+
+            val mins = (TimeUnit.MILLISECONDS.toMinutes(publishedDuration)).toInt()
+            if (mins >= 1)
+                return mins.toString() + "min"
+
+
+            val seconds = (TimeUnit.MILLISECONDS.toSeconds(publishedDuration)).toInt()
+            if (seconds >= 3)
+                return seconds.toString() + "s"
+
+            return "just now"
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
 
     fun convertNumberToMMSS(seconds: Long): String {
         val s: Long = seconds % 60
@@ -159,8 +214,37 @@ object CalendarUtils {
         val isDaylight = tz.inDaylightTime(Date())
         val time = tz.getDisplayName(isDaylight, TimeZone.SHORT)
         val re = Regex("[^0-9+-]")
-        val timezone = re.replace(time,"")
+
+        if (time.equals("IST")) {
+            return "+0530"
+        }
+        val timezone = re.replace(time, "")
+
         return timezone
     }
 
+    fun getCurrentTimeStamp():String{
+        val c: Calendar = Calendar.getInstance(TimeZone.getDefault())
+        println("current:::->${c.get(Calendar.YEAR)}-${c.get(Calendar.MONTH)+1}-${c.get(Calendar.DAY_OF_MONTH)}")
+        return "${c.get(Calendar.YEAR)}-${c.get(Calendar.MONTH)+1}-${c.get(Calendar.DAY_OF_MONTH)}"
+    }
+
+    fun getPreviousOrFutureDate(dateFormat: String,days:Int):String{
+        val c: Calendar = Calendar.getInstance()
+        val simpleDateFormat = SimpleDateFormat(dateFormat)
+        c.add(Calendar.DAY_OF_YEAR,days)
+        return simpleDateFormat.format(Date(c.timeInMillis))
+    }
+
+
+    fun isDatePast(dateFormat: String,date: String,currentDate:String):Boolean{
+        return try {
+            val sdf = SimpleDateFormat(dateFormat)
+            val firstDate: Date = sdf.parse(date)
+            val secondDate: Date = sdf.parse(currentDate)
+            firstDate.before(secondDate)
+        }catch (e:Exception){
+            return false
+        }
+    }
 }

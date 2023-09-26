@@ -1,6 +1,6 @@
 package com.sportzinteractive.baseprojectsetup.business.interceptor
 
-import com.sportzinteractive.baseprojectsetup.business.model.CountryListState
+import com.sportzinteractive.baseprojectsetup.business.domain.model.CountryListState
 import com.sportzinteractive.baseprojectsetup.data.repository.GeneralRepository
 import com.sportzinteractive.baseprojectsetup.di.DefaultDispatcher
 import com.sportzinteractive.baseprojectsetup.helper.Resource

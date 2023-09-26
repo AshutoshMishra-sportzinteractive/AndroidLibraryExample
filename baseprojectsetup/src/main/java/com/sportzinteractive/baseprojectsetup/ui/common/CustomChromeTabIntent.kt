@@ -16,8 +16,7 @@ class CustomChromeTabIntent @Inject constructor(
         activity: Activity,
         url: String,
     ) {
-        if(url.isBlank())
-            return
+        if (url.isBlank()) return
 
         val uri = Uri.parse(url)
         val packageName = "com.android.chrome"
@@ -25,7 +24,9 @@ class CustomChromeTabIntent @Inject constructor(
         try {
             customTabsIntent.launchUrl(activity, uri)
         } catch (e: Exception) {
-            activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            try {
+                activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            } catch (e: Exception) {}
         }
     }
 

@@ -1,0 +1,33 @@
+package com.sportzinteractive.baseprojectsetup.business.domain.model.footballfixtures
+
+data class Matches(
+    val endDate: String?,
+    val eventFormat: String?,
+    val eventGroup: String?,
+    val eventIsLinkable: String?,
+    val eventName: String?,
+    val eventStage: String?,
+    val eventState: String?,
+    val eventStateTemp: String?,
+    val eventStatus: String?,
+    val eventStatusId: String?,
+    val eventSubStatus: String?,
+    val gameId: String?,
+    val isRescheduled: String?,
+    val isTbc: String?,
+    val leagueCode: String?,
+    val participants: List<Participant?>?,
+    val resultCode: String?,
+    val resultSubCode: String?,
+    val seriesId: String?,
+    val seriesName: String?,
+    val sport: String?,
+    val formatedStartDate: String?,
+    val startDate:String?,
+    val startDateWithTime:String?,
+    val tourId: String?,
+    val tourName: String?,
+    val venueId: String?,
+    val venueName: String?,
+    val winningMargin: String?
+)

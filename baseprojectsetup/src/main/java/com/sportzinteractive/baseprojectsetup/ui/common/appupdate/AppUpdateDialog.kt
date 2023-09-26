@@ -1,13 +1,12 @@
 package com.sportzinteractive.baseprojectsetup.ui.common.appupdate
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.isVisible
+import androidx.viewbinding.ViewBinding
 
 interface UpdateDialogPopUpListener {
     fun onDialogDismissed()
@@ -23,7 +22,15 @@ object AppUpdateDialog{
         return updateType == "1" || updateType == "2"
     }
 
-    fun showUpdatePopup(dismissListener: UpdateDialogPopUpListener,updateType:String,view: View,btnCancel: View,btnSubmit: View,activity: Activity,playStoreUrl:String) {
+    fun showUpdatePopup(
+        dismissListener: UpdateDialogPopUpListener,
+        updateType: String,
+        view: ViewBinding,
+        btnCancel: View,
+        btnSubmit: View,
+        activity: Activity,
+        playStoreUrl: String
+    ) {
 
         val showDismissButton = updateType == "1"
 
@@ -41,17 +48,17 @@ object AppUpdateDialog{
     private fun buildPopUp(
         showNegativeButton: Boolean = false,
         dismissListener: UpdateDialogPopUpListener? = null,
-        view : View,
-        btnCancel:View,
-        btnSubmit:View,
+        view: ViewBinding,
+        btnCancel: View,
+        btnSubmit: View,
         activity: Activity,
-        playStoreUrl:String
+        playStoreUrl: String
     ) {
 
         val dialogBuilder = AlertDialog.Builder(activity)
         dialogBuilder.setCancelable(false)
         view.apply {
-            dialogBuilder.setView(view)
+            dialogBuilder.setView(view.root)
             val alertDialog = dialogBuilder.create()
 
 

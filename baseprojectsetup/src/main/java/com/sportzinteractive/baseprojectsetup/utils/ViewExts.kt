@@ -190,3 +190,17 @@ fun Activity.shareUrl(chooserTitle: String = "Share to", url: String?) {
 
 }
 
+fun View.visibility(flag: Boolean){
+    visibility = if(flag)
+        View.VISIBLE
+    else
+        View.GONE
+}
+
+fun View.switchVisibility(){
+    visibility = if(visibility == View.VISIBLE) 
+        View.GONE
+    else
+        View.VISIBLE
+}
+

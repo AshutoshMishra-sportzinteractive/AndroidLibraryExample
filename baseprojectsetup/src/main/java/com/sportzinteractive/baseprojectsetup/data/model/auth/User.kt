@@ -28,6 +28,8 @@ data class User(
     val email: String?,
     val password: String?,
     val confirmPassword: String?,
+    val accountCreateDateTime: String?,
+    val accountCreateDate: String?,
     val status:Int?,
     val state: String?,
     val stateId:String?,
@@ -79,6 +81,8 @@ data class User(
         email = null,
         password = null,
         confirmPassword = null,
+        accountCreateDateTime = null,
+        accountCreateDate = null,
         status = null,
         state = stateName,
         stateId = stateId

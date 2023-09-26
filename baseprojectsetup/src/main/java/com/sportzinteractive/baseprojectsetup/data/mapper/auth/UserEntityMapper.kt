@@ -4,8 +4,8 @@ import com.sportzinteractive.baseprojectsetup.data.model.auth.User
 import com.sportzinteractive.baseprojectsetup.data.model.auth.UserEntity
 import com.sportzinteractive.baseprojectsetup.helper.EntityDomainMapper
 import com.sportzinteractive.baseprojectsetup.utils.CalendarUtils
+import com.sportzinteractive.baseprojectsetup.utils.CalendarUtils.DOB_DATE_DISPLAY_FORMAT
 import com.sportzinteractive.baseprojectsetup.utils.CalendarUtils.DOB_DATE_FORMAT
-import com.sportzinteractive.baseprojectsetup.utils.CalendarUtils.PUBLISHED_DISPLAY_DATE_FORMAT
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -47,7 +47,7 @@ class UserEntityMapper @Inject constructor(
             city = entity.city,
             countryId = entity.countryId,
             countryName = entity.countryName,
-            dob = CalendarUtils.convertDateStringToSpecifiedDateString(entity.dob,DOB_DATE_FORMAT,requiredDateFormat = PUBLISHED_DISPLAY_DATE_FORMAT),
+            dob = CalendarUtils.convertDateStringToSpecifiedDateString(entity.dob,DOB_DATE_FORMAT,requiredDateFormat = DOB_DATE_DISPLAY_FORMAT),
             favouritePlayerId = entity.favouritePlayerId,
             favouritePlayerName = entity.favouritePlayerName,
             favouriteClub = entity.favouriteClub,
@@ -69,6 +69,8 @@ class UserEntityMapper @Inject constructor(
             email = null,
             password = null,
             confirmPassword = null,
+            accountCreateDateTime = null,
+            accountCreateDate = null,
             status = null,
             state = entity.state,
             stateId = entity.stateId
@@ -79,6 +81,25 @@ class UserEntityMapper @Inject constructor(
         return toDomain(entity)
             .copy(
                 email = email,
+                status = status
+            )
+    }
+
+    fun toDomain(
+        entity: UserEntity,
+        email: String?,
+        accountCreateDateTime: String?,
+        status: Int?
+    ): User {
+        return toDomain(entity)
+            .copy(
+                email = email,
+                accountCreateDateTime = accountCreateDateTime,
+                accountCreateDate = CalendarUtils.convertDateStringToSpecifiedDateString(
+                    dateString = accountCreateDateTime,
+                    dateFormat = "yyyy-MM-dd hh:mm:ss.SSSSSS", //2021-12-02 11:01:51.481968
+                    requiredDateFormat = "MMM dd, yyyy"
+                ),
                 status = status
             )
     }

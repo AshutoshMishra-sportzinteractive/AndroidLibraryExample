@@ -13,14 +13,11 @@ data class UpdateUserProfileRequest(
     val emailId:String?,
     @SerializedName("user_guid")
     val userGuid:String?,
-    @SerializedName("token")
-    val token:String?,
-    @SerializedName("epoch_timestamp")
-    val epochTimestamp:String?,
     @SerializedName("captcha")
     val captcha:String?,
     @SerializedName("is_custom_image")
     val isCustomImage:String?,
+    @SerializedName("is_app") val isApp: String? = "1",
 )
 
 data class ImageJson(

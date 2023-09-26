@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id 'maven-publish'
@@ -93,7 +94,7 @@ afterEvaluate {
 
                 groupId = 'com.github.AshutoshMishra-sportzinteractive'
                 artifactId = 'sportz-interactive-library'
-                version = '2.9'
+                version = '3.0'
             }
         }
     }
